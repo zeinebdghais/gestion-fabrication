@@ -1,0 +1,19 @@
+# Eclipse / STS metadata
+.metadata/
+.recommenders/
+
+# Spring Boot backend
+gestion-fabrication-backend/target/
+gestion-fabrication-backend/.classpath
+gestion-fabrication-backend/.project
+gestion-fabrication-backend/.settings/
+
+# Angular frontend
+gestion-fabrication-frontend/node_modules/
+gestion-fabrication-frontend/dist/
+gestion-fabrication-frontend/.angular/
+
+# IDE
+.idea/
+*.iml
+.DS_Store
