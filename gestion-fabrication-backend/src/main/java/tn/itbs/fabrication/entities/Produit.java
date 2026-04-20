@@ -34,4 +34,5 @@ public class Produit {
     @OneToMany(mappedBy = "produit")
     @JsonIgnore
     private List<OrdreFabrication> ordresFabrication;
+    
 }

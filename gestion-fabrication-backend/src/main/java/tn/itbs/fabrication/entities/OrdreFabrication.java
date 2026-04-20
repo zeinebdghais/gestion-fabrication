@@ -34,7 +34,7 @@ public class OrdreFabrication {
     @JoinColumn(name = "machine_id", nullable = false)
     private Machine machine;
 
-    @ManyToOne
-    @JoinColumn(name = "employe_id", nullable = false)
-    private Employe employe;
+    //@ManyToOne
+    //@JoinColumn(name = "employe_id", nullable = false)
+    //private Employe employe;
 }

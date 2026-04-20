@@ -1,6 +1,5 @@
 package tn.itbs.fabrication.controllers;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import tn.itbs.fabrication.entities.OrdreFabrication;
 import tn.itbs.fabrication.services.OrdreFabricationService;
@@ -9,34 +8,40 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/ordres")
-@RequiredArgsConstructor
 @CrossOrigin("*")
 public class OrdreFabricationController {
 
-    private final OrdreFabricationService ordreService;
+    private final OrdreFabricationService service;
 
-    @GetMapping
-    public List<OrdreFabrication> getAll() {
-        return ordreService.getAll();
-    }
-
-    @GetMapping("/{id}")
-    public OrdreFabrication getById(@PathVariable Long id) {
-        return ordreService.getById(id);
+    public OrdreFabricationController(OrdreFabricationService service) {
+        this.service = service;
     }
 
     @PostMapping
-    public OrdreFabrication create(@RequestBody OrdreFabrication ordre) {
-        return ordreService.create(ordre);
+    public OrdreFabrication creer(
+            @RequestParam Long produitId,
+            @RequestParam Long machineId,
+            @RequestParam int quantite,
+            @RequestParam String projet) {
+
+        return service.creerOrdre(produitId, machineId, quantite, projet);
     }
 
-    @PutMapping("/{id}")
-    public OrdreFabrication update(@PathVariable Long id, @RequestBody OrdreFabrication ordre) {
-        return ordreService.update(id, ordre);
+    @GetMapping
+    public List<OrdreFabrication> getAll() {
+        return service.getAll();
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        ordreService.delete(id);
+    @PutMapping("/{id}/etat")
+    public OrdreFabrication changerEtat(
+            @PathVariable Long id,
+            @RequestParam String etat) {
+
+        return service.changerEtat(id, etat);
+    }
+
+    @GetMapping("/en-cours")
+    public List<OrdreFabrication> getEnCours() {
+        return service.getOrdresEnCours();
     }
 }

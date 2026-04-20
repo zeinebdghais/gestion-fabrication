@@ -22,15 +22,7 @@ public class Employe {
     @Column(nullable = false, length = 100)
     private String poste;
 
-    @ManyToMany
-    @JoinTable(
-        name = "employe_machine",
-        joinColumns = @JoinColumn(name = "employe_id"),
-        inverseJoinColumns = @JoinColumn(name = "machine_id")
-    )
-    private List<Machine> machines;
-
-    @OneToMany(mappedBy = "employe")
-    @JsonIgnore
-    private List<OrdreFabrication> ordresFabrication;
+    @ManyToOne
+    @JoinColumn(name = "machine_id")
+    private Machine machine;
 }

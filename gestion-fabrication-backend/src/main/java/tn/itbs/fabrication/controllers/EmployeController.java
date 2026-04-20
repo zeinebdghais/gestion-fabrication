@@ -1,6 +1,5 @@
 package tn.itbs.fabrication.controllers;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import tn.itbs.fabrication.entities.Employe;
 import tn.itbs.fabrication.services.EmployeService;
@@ -9,34 +8,30 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/employes")
-@RequiredArgsConstructor
 @CrossOrigin("*")
 public class EmployeController {
 
-    private final EmployeService employeService;
+    private final EmployeService service;
 
-    @GetMapping
-    public List<Employe> getAll() {
-        return employeService.getAll();
-    }
-
-    @GetMapping("/{id}")
-    public Employe getById(@PathVariable Long id) {
-        return employeService.getById(id);
+    public EmployeController(EmployeService service) {
+        this.service = service;
     }
 
     @PostMapping
     public Employe create(@RequestBody Employe employe) {
-        return employeService.create(employe);
+        return service.save(employe);
     }
 
-    @PutMapping("/{id}")
-    public Employe update(@PathVariable Long id, @RequestBody Employe employe) {
-        return employeService.update(id, employe);
+    @GetMapping
+    public List<Employe> getAll() {
+        return service.getAll();
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        employeService.delete(id);
+    @PutMapping("/{id}/assigner-machine")
+    public Employe assignerMachine(
+            @PathVariable Long id,
+            @RequestParam Long machineId) {
+
+        return service.assignerMachine(id, machineId);
     }
 }

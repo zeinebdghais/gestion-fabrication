@@ -31,7 +31,6 @@ public class Machine {
     @JsonIgnore
     private List<OrdreFabrication> ordresFabrication;
 
-    @ManyToMany(mappedBy = "machines")
-    @JsonIgnore
+    @OneToMany(mappedBy = "machine")
     private List<Employe> employes;
 }

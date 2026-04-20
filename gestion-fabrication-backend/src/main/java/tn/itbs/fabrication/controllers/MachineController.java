@@ -1,42 +1,47 @@
 package tn.itbs.fabrication.controllers;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import tn.itbs.fabrication.entities.Machine;
 import tn.itbs.fabrication.services.MachineService;
 
 import java.util.List;
 
+import java.time.LocalDate;
+
+
 @RestController
 @RequestMapping("/api/machines")
-@RequiredArgsConstructor
 @CrossOrigin("*")
 public class MachineController {
 
-    private final MachineService machineService;
+    private final MachineService service;
 
-    @GetMapping
-    public List<Machine> getAll() {
-        return machineService.getAll();
-    }
-
-    @GetMapping("/{id}")
-    public Machine getById(@PathVariable Long id) {
-        return machineService.getById(id);
+    public MachineController(MachineService service) {
+        this.service = service;
     }
 
     @PostMapping
     public Machine create(@RequestBody Machine machine) {
-        return machineService.create(machine);
+        return service.save(machine);
     }
 
-    @PutMapping("/{id}")
-    public Machine update(@PathVariable Long id, @RequestBody Machine machine) {
-        return machineService.update(id, machine);
+    @GetMapping
+    public List<Machine> getAll() {
+        return service.getAll();
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        machineService.delete(id);
+    @GetMapping("/{id}")
+    public Machine getById(@PathVariable Long id) {
+        return service.getById(id);
+    }
+
+    @PutMapping("/{id}/maintenance")
+    public Machine maintenance(@PathVariable Long id) {
+        return service.faireMaintenance(id);
+    }
+
+    @GetMapping("/a-maintenir")
+    public List<Machine> machinesAEntretenir(@RequestParam String date) {
+        return service.machinesAEntretenir(LocalDate.parse(date));
     }
 }
