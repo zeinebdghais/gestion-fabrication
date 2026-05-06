@@ -1,6 +1,7 @@
 package tn.itbs.fabrication.entities;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -14,23 +15,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Machine {
 
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false)
     private String nom;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false)
     private String etat;
 
-    @Column(name = "derniere_maintenance")
     private LocalDate derniereMaintenance;
 
     @OneToMany(mappedBy = "machine")
-    @JsonIgnore
-    private List<OrdreFabrication> ordresFabrication;
+    private List<OrdreFabrication> ordres = new ArrayList<>();
 
-    @OneToMany(mappedBy = "machine")
-    private List<Employe> employes;
+    @OneToMany(mappedBy = "machineAssignee")
+    private List<Employe> employes = new ArrayList<>();
 }

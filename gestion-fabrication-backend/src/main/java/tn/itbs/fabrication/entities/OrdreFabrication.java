@@ -3,6 +3,8 @@ package tn.itbs.fabrication.entities;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -10,20 +12,20 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class OrdreFabrication {
 
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false)
     private String projet;
 
     @Column(nullable = false)
-    private int quantite;
+    private Integer quantite;
 
-    @Column(nullable = false, name = "date_fabrication")
+    @Column(nullable = false)
     private LocalDate date;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false)
     private String etat;
 
     @ManyToOne
@@ -31,10 +33,7 @@ public class OrdreFabrication {
     private Produit produit;
 
     @ManyToOne
-    @JoinColumn(name = "machine_id", nullable = false)
+    @JoinColumn(name = "machine_id")
     private Machine machine;
-
-    //@ManyToOne
-    //@JoinColumn(name = "employe_id", nullable = false)
-    //private Employe employe;
+  
 }

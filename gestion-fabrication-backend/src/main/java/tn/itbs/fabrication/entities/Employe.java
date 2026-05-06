@@ -12,17 +12,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Employe {
 
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false)
     private String nom;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false)
     private String poste;
 
     @ManyToOne
     @JoinColumn(name = "machine_id")
-    private Machine machine;
+    private Machine machineAssignee;
 }

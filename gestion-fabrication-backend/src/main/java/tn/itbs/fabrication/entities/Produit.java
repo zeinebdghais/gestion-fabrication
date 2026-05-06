@@ -1,5 +1,6 @@
 package tn.itbs.fabrication.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -17,7 +18,7 @@ public class Produit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @Column(nullable = false, length = 100)
     private String nom;
@@ -32,7 +33,6 @@ public class Produit {
     private String fournisseur;
 
     @OneToMany(mappedBy = "produit")
-    @JsonIgnore
-    private List<OrdreFabrication> ordresFabrication;
+    private List<OrdreFabrication> ordresFabrication = new ArrayList<>();
     
 }
