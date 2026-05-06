@@ -3,13 +3,16 @@ package tn.itbs.fabrication.repositories;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 import tn.itbs.fabrication.entities.Produit;
 
-public interface ProduitRepository extends JpaRepository<Produit, Long> {
+@Repository
+public interface ProduitRepository extends JpaRepository<Produit, Integer> {
 	
-	// Rechercher par nom
-    List<Produit> findByNom(String nom);
+	List<Produit> findByNom(String nom);
 
-    // Produits avec stock faible
-    List<Produit> findByStockLessThan(int stock);
+    List<Produit> findByType(String type);
+
+    List<Produit> findByStockLessThan(Integer quantite);
 }
