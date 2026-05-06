@@ -1,43 +1,64 @@
 package tn.itbs.fabrication.services;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
 import tn.itbs.fabrication.entities.Produit;
 import tn.itbs.fabrication.repositories.ProduitRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class ProduitService {
 
-    private final ProduitRepository produitRepository;
+	@Autowired
+    private ProduitRepository produitRepo;
 
-    public List<Produit> getAll() {
-        return produitRepository.findAll();
+    public List<Produit> trouverTousLesProduits() {
+        return produitRepo.findAll();
     }
 
-    public Produit getById(Long id) {
-        return produitRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Produit introuvable"));
+    public Optional<Produit> trouverProduitParId(int id) {
+        return produitRepo.findById(id);
     }
 
-    public Produit create(Produit produit) {
-        return produitRepository.save(produit);
+    public List<Produit> trouverProduitParNom(String nom) {
+        return produitRepo.findByNom(nom);
     }
 
-    public Produit update(Long id, Produit produit) {
-        Produit existing = getById(id);
-
-        existing.setNom(produit.getNom());
-        existing.setType(produit.getType());
-        existing.setStock(produit.getStock());
-        existing.setFournisseur(produit.getFournisseur());
-
-        return produitRepository.save(existing);
+    public void ajouterProduit(Produit produit) {
+        produitRepo.save(produit);
     }
 
-    public void delete(Long id) {
-        produitRepository.deleteById(id);
+    public ResponseEntity<String> supprimerProduit(int id) {
+        produitRepo.findById(id).ifPresentOrElse(
+            p -> {
+                produitRepo.deleteById(id);
+            },
+            () -> {
+                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Produit non trouvé");
+            }
+        );
+        return ResponseEntity.ok("Suppression avec succès");
+    }
+
+    public ResponseEntity<String> mettreAJourProduit(int id, Produit prod) {
+        produitRepo.findById(id).ifPresentOrElse(
+            p -> {
+                p.setNom(prod.getNom());
+                p.setType(prod.getType());
+                p.setStock(prod.getStock());
+                p.setFournisseur(prod.getFournisseur());
+                produitRepo.save(p);
+            },
+            () -> {
+                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Produit non trouvé");
+            }
+        );
+        return ResponseEntity.ok("Mise à jour avec succès");
     }
 }

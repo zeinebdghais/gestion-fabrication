@@ -1,42 +1,76 @@
 package tn.itbs.fabrication.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
 import tn.itbs.fabrication.entities.Machine;
 import tn.itbs.fabrication.repositories.MachineRepository;
-
-import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MachineService {
 
-	private final MachineRepository machineRepo;
+	@Autowired
+    private MachineRepository machineRepo;
 
-    public MachineService(MachineRepository machineRepo) {
-        this.machineRepo = machineRepo;
-    }
-
-    public Machine save(Machine machine) {
-        return machineRepo.save(machine);
-    }
-
-    public List<Machine> getAll() {
+    public List<Machine> trouverToutesLesMachines() {
         return machineRepo.findAll();
     }
 
-    public Machine getById(Long id) {
-        return machineRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Machine introuvable"));
+    public Optional<Machine> trouverMachineParId(int id) {
+        return machineRepo.findById(id);
     }
 
-    public Machine faireMaintenance(Long id) {
-        Machine machine = getById(id);
-        machine.setDerniereMaintenance(LocalDate.now());
-        machine.setEtat("DISPONIBLE");
-        return machineRepo.save(machine);
+    public List<Machine> trouverMachineParEtat(String etat) {
+        return machineRepo.findByEtat(etat);
     }
 
-    public List<Machine> machinesAEntretenir(LocalDate date) {
-        return machineRepo.findByDerniereMaintenanceBefore(date);
+    public void ajouterMachine(Machine machine) {
+        machine.setEtat("Disponible");
+        machineRepo.save(machine);
+    }
+
+    public ResponseEntity<String> supprimerMachine(int id) {
+        machineRepo.findById(id).ifPresentOrElse(
+            m -> {
+                machineRepo.deleteById(id);
+            },
+            () -> {
+                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Machine non trouvée");
+            }
+        );
+        return ResponseEntity.ok("Suppression avec succès");
+    }
+
+    public ResponseEntity<String> mettreAJourMachine(int id, Machine mach) {
+        machineRepo.findById(id).ifPresentOrElse(
+            m -> {
+                m.setNom(mach.getNom());
+                m.setEtat(mach.getEtat());
+                m.setDerniereMaintenance(mach.getDerniereMaintenance());
+                machineRepo.save(m);
+            },
+            () -> {
+                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Machine non trouvée");
+            }
+        );
+        return ResponseEntity.ok("Mise à jour avec succès");
+    }
+
+    public ResponseEntity<String> planifierMaintenance(int id) {
+        machineRepo.findById(id).ifPresentOrElse(
+            m -> {
+                m.setEtat("En maintenance");
+                machineRepo.save(m);
+            },
+            () -> {
+                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Machine non trouvée");
+            }
+        );
+        return ResponseEntity.ok("Maintenance planifiée avec succès");
     }
 }
