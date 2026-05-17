@@ -1,12 +1,8 @@
 package tn.itbs.fabrication.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import tn.itbs.fabrication.entities.Produit;
-import tn.itbs.fabrication.services.ProduitService;
-
 import java.util.List;
 
-import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import tn.itbs.fabrication.dto.ProduitDTO;
+import tn.itbs.fabrication.services.ProduitService;
+
 @RestController
 @RequestMapping("/produit")
 public class ProduitController {
@@ -24,17 +23,17 @@ public class ProduitController {
 	private ProduitService prodService;
 	
 	@GetMapping("/get/{id}")
-	public Optional<Produit> trouverProduitParId(@PathVariable int id) {
+	public ProduitDTO trouverProduitParId(@PathVariable int id) {
 		return prodService.trouverProduitParId(id);
 	}
 	
 	@GetMapping("/get/nom/{nom}")
-	public List<Produit> getProduitParNom(@PathVariable String nom) {
+	public List<ProduitDTO> getProduitParNom(@PathVariable String nom) {
 		return prodService.trouverProduitParNom(nom);
 	}
 	
 	@PostMapping("/add")
-	public void ajouterProduit(@RequestBody Produit prod) {
+	public void ajouterProduit(@RequestBody ProduitDTO prod) {
 		prodService.ajouterProduit(prod);
 	}
 	
@@ -44,7 +43,7 @@ public class ProduitController {
 	}
 	
 	@PutMapping("/modif/{id}")
-	public void miseAJourProduit(@PathVariable int id, @RequestBody Produit p) {
+	public void miseAJourProduit(@PathVariable int id, @RequestBody ProduitDTO p) {
 		prodService.mettreAJourProduit(id, p);
 	}
 }

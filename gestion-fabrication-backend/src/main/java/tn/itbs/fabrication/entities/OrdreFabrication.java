@@ -3,8 +3,6 @@ package tn.itbs.fabrication.entities;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Data
@@ -20,7 +18,7 @@ public class OrdreFabrication {
     private String projet;
 
     @Column(nullable = false)
-    private Integer quantite;
+    private int quantite;
 
     @Column(nullable = false)
     private LocalDate date;

@@ -1,11 +1,6 @@
 package tn.itbs.fabrication.controllers;
 
-import tn.itbs.fabrication.entities.Machine;
-import tn.itbs.fabrication.services.MachineService;
-
 import java.util.List;
-
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import tn.itbs.fabrication.dto.MachineDTO;
+import tn.itbs.fabrication.services.MachineService;
+
 @RestController
 @RequestMapping("/machine")
 public class MachineController {
@@ -25,17 +23,17 @@ public class MachineController {
 	private MachineService machService;
 	
 	@GetMapping("/get/{id}")
-	public Optional<Machine> trouverMachineParId(@PathVariable int id) {
+	public MachineDTO trouverMachineParId(@PathVariable int id) {
 		return machService.trouverMachineParId(id);
 	}
 	
 	@GetMapping("/get/etat/{etat}")
-	public List<Machine> getMachineParEtat(@PathVariable String etat) {
+	public List<MachineDTO> getMachineParEtat(@PathVariable String etat) {
 		return machService.trouverMachineParEtat(etat);
 	}
 	
 	@PostMapping("/add")
-	public void ajouterMachine(@RequestBody Machine mach) {
+	public void ajouterMachine(@RequestBody MachineDTO mach) {
 		machService.ajouterMachine(mach);
 	}
 	
@@ -45,7 +43,7 @@ public class MachineController {
 	}
 	
 	@PutMapping("/modif/{id}")
-	public void miseAJourMachine(@PathVariable int id, @RequestBody Machine m) {
+	public void miseAJourMachine(@PathVariable int id, @RequestBody MachineDTO m) {
 		machService.mettreAJourMachine(id, m);
 	}
 	

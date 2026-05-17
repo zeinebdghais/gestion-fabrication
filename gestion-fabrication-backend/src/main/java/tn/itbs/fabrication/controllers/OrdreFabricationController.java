@@ -1,6 +1,6 @@
 package tn.itbs.fabrication.controllers;
+
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import tn.itbs.fabrication.entities.OrdreFabrication;
+import tn.itbs.fabrication.dto.OrdreFabricationDTO;
 import tn.itbs.fabrication.services.OrdreFabricationService;
 
 @RestController
@@ -22,18 +22,23 @@ public class OrdreFabricationController {
 	@Autowired
 	private OrdreFabricationService ordreService;
 	
+	@GetMapping("/get")
+	public List<OrdreFabricationDTO> getAllOrdre() {
+		return ordreService.trouverTousLesOrdres();
+	}
+	
 	@GetMapping("/get/{id}")
-	public Optional<OrdreFabrication> trouverOrdreParId(@PathVariable int id) {
+	public OrdreFabricationDTO trouverOrdreParId(@PathVariable int id) {
 		return ordreService.trouverOrdreParId(id);
 	}
 	
 	@GetMapping("/get/etat/{etat}")
-	public List<OrdreFabrication> getOrdreParEtat(@PathVariable String etat) {
+	public List<OrdreFabricationDTO> getOrdreParEtat(@PathVariable String etat) {
 		return ordreService.trouverOrdreParEtat(etat);
 	}
 	
 	@PostMapping("/add")
-	public void creerOrdre(@RequestBody OrdreFabrication ordre) {
+	public void creerOrdre(@RequestBody OrdreFabricationDTO ordre) {
 		ordreService.creerOrdre(ordre);
 	}
 	
@@ -43,7 +48,7 @@ public class OrdreFabricationController {
 	}
 	
 	@PutMapping("/modif/{id}")
-	public void miseAJourOrdre(@PathVariable int id, @RequestBody OrdreFabrication o) {
+	public void miseAJourOrdre(@PathVariable int id, @RequestBody OrdreFabricationDTO o) {
 		ordreService.mettreAJourOrdre(id, o);
 	}
 	

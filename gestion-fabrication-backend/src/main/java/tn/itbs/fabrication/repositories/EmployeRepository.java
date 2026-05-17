@@ -11,7 +11,7 @@ import tn.itbs.fabrication.entities.Employe;
 public interface EmployeRepository extends JpaRepository<Employe, Integer> {
 	List<Employe> findByPoste(String poste);
 
-    List<Employe> findByMachineAssigneeId(Long machineId);
+    List<Employe> findByMachineAssigneeId(int machineId);
 
     List<Employe> findByMachineAssigneeIsNull();
 

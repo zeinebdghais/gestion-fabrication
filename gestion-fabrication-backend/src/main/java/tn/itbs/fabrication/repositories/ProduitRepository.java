@@ -14,5 +14,5 @@ public interface ProduitRepository extends JpaRepository<Produit, Integer> {
 
     List<Produit> findByType(String type);
 
-    List<Produit> findByStockLessThan(Integer quantite);
+    List<Produit> findByStockLessThan(int quantite);
 }
