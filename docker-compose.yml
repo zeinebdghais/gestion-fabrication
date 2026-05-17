@@ -1,0 +1,56 @@
+version: "3.8"
+
+services:
+  # ===== BASE DE DONNÉES MySQL =====
+  mysql:
+    image: mysql:8.0
+    container_name: gestion-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: gestion-fabrication
+    ports:
+      - "3307:3306" # 3307 sur votre machine pour éviter conflit avec MySQL local
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ===== BACKEND Spring Boot =====
+  backend:
+    build: ./gestion-fabrication-backend
+    container_name: gestion-backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/gestion-fabrication?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  # ===== FRONTEND Angular =====
+  frontend:
+    build: ./gestion-fabrication-frontend
+    container_name: gestion-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql_data:

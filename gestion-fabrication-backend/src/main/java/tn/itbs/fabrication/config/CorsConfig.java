@@ -9,8 +9,13 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:4200")
+                .allowedOrigins(
+                    "http://localhost:4200",   // dev local (ng serve)
+                    "http://localhost",         // Docker frontend (port 80)
+                    "http://localhost:80"       // Docker frontend (explicite)
+                )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*");
     }
 }
+ 
